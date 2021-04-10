@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#30344C"
+    android:gravity="center|top"
+    android:orientation="vertical"
+    tools:context=".QuestionCreatorActivity">
+
+    <EditText
+        android:id="@+id/editQuestionCat"
+        android:layout_width="321dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="50dp"
+        android:autofillHints=""
+        android:background="#F4EFC3"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/category"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/buttonBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ListView
+        android:id="@+id/autoCompleteListView"
+        android:layout_width="321dp"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:visibility="visible"
+        tools:visibility="gone" />
+
+    <EditText
+        android:id="@+id/editAnswer"
+        android:layout_width="321dp"
+        android:layout_height="129dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:autofillHints=""
+        android:background="#F4EFC3"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="@string/answer"
+        android:inputType="textMultiLine"
+        android:singleLine="false"
+        app:layout_constraintBottom_toTopOf="@+id/buttonBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editQuestion"
+        android:layout_width="321dp"
+        android:layout_height="129dp"
+        android:layout_marginBottom="50dp"
+        android:autofillHints=""
+        android:background="#F4EFC3"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="@string/question"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/buttonBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="167dp"
+            android:layout_height="68dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.11"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.889" />
+
+        <Button
+            android:id="@+id/buttonQuestionCreate"
+            android:layout_width="167dp"
+            android:layout_height="68dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/create_question"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.86"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.889" />
+    </LinearLayout>
+
+</LinearLayout>

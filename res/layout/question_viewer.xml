@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#30344C"
+    android:orientation="vertical"
+    tools:context=".QuestionViewerActivity">
+
+    <FrameLayout
+        android:id="@+id/filterFrame"
+        android:layout_width="match_parent"
+        android:layout_height="70sp"
+        android:layout_marginTop="50sp">
+
+        <View
+            android:id="@+id/filterBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#BF9D47" />
+
+        <TextView
+            android:id="@+id/filterNameText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00FFFFFF"
+            android:gravity="center"
+            android:text="@string/default_filter_name"
+            android:textColor="#000000"
+            android:textSize="25sp" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/questionFrame"
+        android:layout_width="match_parent"
+        android:layout_height="490sp">
+
+        <View
+            android:id="@+id/questionBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#CD9F13" />
+
+        <LinearLayout
+            android:id="@+id/questionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15sp"
+            android:layout_marginLeft="15sp"
+            android:layout_marginTop="15sp"
+            android:layout_marginEnd="15sp"
+            android:layout_marginRight="15sp"
+            android:layout_marginBottom="15sp"
+            android:background="#F4EFC3"
+            android:clickable="false"
+            android:gravity="clip_horizontal|center"
+            android:longClickable="false"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/questionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                tools:text="Question Text" />
+
+            <ImageView
+                android:id="@+id/questionImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/question_image"
+                android:visibility="gone"
+                app:srcCompat="@color/white" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/buttonFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/bottomBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#30344C" />
+
+        <LinearLayout
+            android:id="@+id/bottomButtonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonBack"
+                android:layout_width="100sp"
+                android:layout_height="50sp"
+                android:text="@string/back" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>
