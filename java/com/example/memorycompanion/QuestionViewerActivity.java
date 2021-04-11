@@ -107,7 +107,7 @@ public class QuestionViewerActivity extends AppCompatActivity
                 {
                     //If the card is swiped less than a certain amount it will return to its original position.
                     //Otherwise it goes off screen.
-                    if(Math.abs(questionLayout.getTranslationX())<580)
+                    if(Math.abs(questionLayout.getTranslationX())<250)
                     {
                         ObjectAnimator animationX = ObjectAnimator.ofFloat(view, "translationX", 0);
 
