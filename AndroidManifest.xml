@@ -26,6 +26,11 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+        <activity android:name=".QuestionCreationEditorActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
         <activity android:name=".QuestionManagerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -34,7 +39,6 @@
         <activity android:name=".QuestionViewerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
             </intent-filter>
         </activity>
     </application>

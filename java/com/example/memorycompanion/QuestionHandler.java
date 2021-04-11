@@ -41,43 +41,74 @@ public class QuestionHandler
             System.out.println("Added Ten Additional Slots");
         }
 
-        //Make sure all cats in the list are valid.
-        List<String> validCats = new ArrayList<>();
-        List<String> tempCats = Arrays.asList(categories.split(","));
-        for(int j = 0; j < tempCats.size(); j++)
+        QuestionNode newQuestion = constructQuestionNode(categories, question, answer);
+
+        //Write Node to first index in list
+        //Removes the index from list.
+        if(newQuestion != null)
         {
-            String cat = tempCats.get(j).trim();
-            //For loop ensure capitalization of first letter and lowercase for rest.
-            //This extends to every word in cat
-            String catCapitolized = "";
-            for(String word : cat.split(" "))
-            {
-                catCapitolized += word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase()+" ";
-                cat = catCapitolized.trim();
-            }
-            if (cat.length() > 0)
-            {
-                validCats.add(cat);
-                knownCategories.add(cat);
-            }
-        }
-        if(validCats.size() > 0 && question.trim().length() > 0 && answer.trim().length() > 0)
-        {
-            //Write Node to first index in list
-            //Removes the index from list.
             writeIndex = writableIndexes.remove(0);
             if (questions[writeIndex].writable)
             {
-                questions[writeIndex] = new QuestionNode(validCats, question, answer, writeIndex);
-            }
-            else
+                newQuestion.index = writeIndex;
+                questions[writeIndex] = newQuestion;
+            } else
             {
                 System.out.println("ERROR! Attempting to write over existing data!");
                 writeIndex = -1;
             }
+            System.out.println(writableIndexes.size() + " Slots Remain Free");
         }
-        System.out.println(writableIndexes.size() + " Slots Remain Free");
+
         return writeIndex;
+    }
+
+    public boolean replaceNodeAtIndex(String categories, String question, String answer, int index)
+    {
+        boolean success = false;
+        QuestionNode replaceQuestion = constructQuestionNode(categories, question, answer);
+        if (replaceQuestion != null)
+        {
+            replaceQuestion.index = index;
+            questions[index] = replaceQuestion;
+            success = true;
+        }
+        return success;
+    }
+
+    //WARNING: The resulting question does not set the index or add itself to the questionNode array.
+    private QuestionNode constructQuestionNode(String categories, String question, String answer)
+    {
+        QuestionNode returnQuestion = null;
+        if(categories.length() > 0)
+        {
+            //Make sure all cats in the list are valid.
+            List<String> validCats = new ArrayList<>();
+            List<String> tempCats = Arrays.asList(categories.split(","));
+            for (int j = 0; j < tempCats.size(); j++)
+            {
+                String cat = tempCats.get(j).trim();
+                //For loop ensure capitalization of first letter and lowercase for rest.
+                //This extends to every word in cat
+                String catCapitolized = "";
+                for (String word : cat.split(" "))
+                {
+                    catCapitolized += word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase() + " ";
+                    cat = catCapitolized.trim();
+                }
+                if (cat.length() > 0)
+                {
+                    validCats.add(cat);
+                    knownCategories.add(cat);
+                }
+            }
+            if (validCats.size() > 0 && question.trim().length() > 0 && answer.trim().length() > 0)
+            {
+                //Index does not get set during this call.
+                returnQuestion = new QuestionNode(validCats, question, answer, 0);
+            }
+        }
+        return returnQuestion;
     }
 
     public void removeQuestionFromArray(int index)
@@ -205,10 +236,15 @@ public class QuestionHandler
         {
 
             System.out.println("Reducing Array Size");
-            int newArraySize = (int)(Math.ceil((float)(questions.length - writableIndexes.size() + 10) / 10) * 10);
+            // It would be better to have 10 or more slots freed up at a time.
+            // If 11 questions exist. Array size should equal 30. (30 - 11 = 19) vs (20 - 11 = 9)
+            int questionCount = questions.length - writableIndexes.size();
+            // (11 + 10 = 21) / 10 = 2.1
+            // (ceil(2.1) = 3) * 10 = 30
+            int newArraySize = (int)(Math.ceil((float)(questionCount + 10) / 10) * 10);
             System.out.println("Array Size Was: " + questions.length);
             System.out.println("New Array Size is: " + newArraySize);
-            int questionCount = questions.length - writableIndexes.size();
+
             System.out.println("Current Questions Count: " + questionCount);
 
             writableIndexes.clear();
@@ -226,7 +262,7 @@ public class QuestionHandler
             }
             questions = new QuestionNode[newArraySize];
             System.arraycopy(tempQuestions, 0, questions, 0, questions.length);
-            for(int i = questions.length - questionCount; i < questions.length; i++)
+            for(int i = questionCount; i < questions.length; i++)
             {
                 if(questions[i] == null)
                 {

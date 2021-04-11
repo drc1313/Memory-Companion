@@ -12,14 +12,15 @@
     <EditText
         android:id="@+id/editQuestionCat"
         android:layout_width="321dp"
-        android:layout_height="39dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:autofillHints=""
         android:background="#F4EFC3"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/category"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
+        android:scrollHorizontally="false"
         app:layout_constraintBottom_toTopOf="@+id/buttonBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -34,6 +35,21 @@
         tools:visibility="gone" />
 
     <EditText
+        android:id="@+id/editQuestion"
+        android:layout_width="321dp"
+        android:layout_height="129dp"
+        android:layout_marginTop="50dp"
+        android:autofillHints=""
+        android:background="#F4EFC3"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="@string/question"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/buttonBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
         android:id="@+id/editAnswer"
         android:layout_width="321dp"
         android:layout_height="129dp"
@@ -46,21 +62,6 @@
         android:hint="@string/answer"
         android:inputType="textMultiLine"
         android:singleLine="false"
-        app:layout_constraintBottom_toTopOf="@+id/buttonBack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/editQuestion"
-        android:layout_width="321dp"
-        android:layout_height="129dp"
-        android:layout_marginBottom="50dp"
-        android:autofillHints=""
-        android:background="#F4EFC3"
-        android:ems="10"
-        android:gravity="top"
-        android:hint="@string/question"
-        android:inputType="textMultiLine"
         app:layout_constraintBottom_toTopOf="@+id/buttonBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -91,7 +92,7 @@
             android:layout_height="68dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:text="@string/create_question"
+            android:text="@string/submit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.86"

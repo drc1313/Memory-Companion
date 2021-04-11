@@ -1,6 +1,5 @@
 package com.example.memorycompanion;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -8,20 +7,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class QuestionManagerActivity extends AppCompatActivity
 {
     QuestionHandler questionHandler = QuestionHandler.getInstance();
     List<QuestionNode> questionsList = questionHandler.getAllQuestions();
+    public static QuestionNode selectedQuestion = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,11 +39,14 @@ public class QuestionManagerActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 System.out.println(questionView);
-
-                System.out.println(questionsList.get(position).question + " Has been Removed");
-                QuestionNode removeNode = questionsList.remove(position);
-                questionHandler.removeQuestionFromArray(removeNode.index);
-                populateQuestionView(questionView, questionView.onSaveInstanceState());
+                selectedQuestion = questionsList.get(position);
+                System.out.println(selectedQuestion.question);
+                Intent activityIntent = new Intent(getApplicationContext(), QuestionCreationEditorActivity.class);
+                startActivity(activityIntent);
+                //System.out.println(questionsList.get(position).question + " Has been Removed");
+               // QuestionNode removeNode = questionsList.remove(position);
+                //questionHandler.removeQuestionFromArray(removeNode.index);
+                //populateQuestionView(questionView, questionView.onSaveInstanceState());
             }
         });
     }
