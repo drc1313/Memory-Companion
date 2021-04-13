@@ -13,8 +13,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-//TODO Add max size to auto complete list
-//TODO Possible crashing on ,,
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 public class QuestionCreationInterfacing extends AppCompatActivity
 {
     QuestionHandler questionHandler = QuestionHandler.getInstance();
@@ -45,6 +46,7 @@ public class QuestionCreationInterfacing extends AppCompatActivity
 
             }
         });
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
         categoryEditText.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {}
@@ -52,23 +54,36 @@ public class QuestionCreationInterfacing extends AppCompatActivity
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-
                 String[] catsListed = categoryEditText.getText().toString().split(",");
-                String catString = catsListed[catsListed.length - 1].trim();
-               // System.out.println(catsListed.length);
-                adapter.clear();
-                if(questionHandler.knownCategories.size() > 0 && catString.length()  > 2)
+                if(catsListed.length > 0)
                 {
-                    for(String knownCat : questionHandler.knownCategories)
+                    String catString = catsListed[catsListed.length - 1].trim();
+                    adapter.clear();
+                    if(questionHandler.knownCategories.size() > 0 && catString.length()  > 2)
                     {
-                        if(catString.length() < knownCat.length() && knownCat.substring(0, catString.length()).toLowerCase().equals(catString.toLowerCase()))
-                            adapter.add(knownCat);
-                    }
-                    if(adapter.getCount() > 0)
-                    {
-                        catAutoComplete.setAdapter(adapter);
-                        catAutoComplete.setVisibility(View.VISIBLE);
+                        for(String knownCat : questionHandler.knownCategories)
+                        {
+                            if(catString.length() < knownCat.length() && knownCat.substring(0, catString.length()).toLowerCase().equals(catString.toLowerCase()))
+                                adapter.add(knownCat);
+                        }
+                        if(categoryEditText.hasFocus() && adapter.getCount() > 0)
+                        {
+                            catAutoComplete.setAdapter(adapter);
+                            if(adapter.getCount() > 4)
+                            {
+                                catAutoComplete.getLayoutParams().height = 600;
+                            }
+                            else
+                            {
+                                catAutoComplete.getLayoutParams().height = WRAP_CONTENT;
+                            }
+
+                            catAutoComplete.setVisibility(View.VISIBLE);
+                        }
+                        else
+                        {
+                            catAutoComplete.setVisibility(View.GONE);
+                        }
                     }
                 }
             }
@@ -80,7 +95,10 @@ public class QuestionCreationInterfacing extends AppCompatActivity
             @Override
             public void onFocusChange(View v, boolean hasFocus)
             {
-                catAutoComplete.setVisibility(View.GONE);
+                if(!hasFocus)
+                {
+                    catAutoComplete.setVisibility(View.GONE);
+                }
             }
         });
     }
