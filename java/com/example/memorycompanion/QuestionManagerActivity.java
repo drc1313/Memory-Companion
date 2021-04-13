@@ -35,6 +35,7 @@ public class QuestionManagerActivity extends AppCompatActivity
 
         populateQuestionView(questionView, null);
 
+        //Pressing a question loads it onto an editor for it
         questionView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -43,10 +44,19 @@ public class QuestionManagerActivity extends AppCompatActivity
                 System.out.println(selectedQuestion.question);
                 Intent activityIntent = new Intent(getApplicationContext(), QuestionCreationEditorActivity.class);
                 startActivity(activityIntent);
-                //System.out.println(questionsList.get(position).question + " Has been Removed");
-               // QuestionNode removeNode = questionsList.remove(position);
-                //questionHandler.removeQuestionFromArray(removeNode.index);
-                //populateQuestionView(questionView, questionView.onSaveInstanceState());
+            }
+        });
+        //Long hold deletes the question.
+        //TODO: Add delete confirmation
+        questionView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                System.out.println(questionsList.get(position).question + " Has been Removed");
+                QuestionNode removeNode = questionsList.remove(position);
+                questionHandler.removeQuestionFromArray(removeNode.index);
+                populateQuestionView(questionView, questionView.onSaveInstanceState());
+                return true;
             }
         });
     }

@@ -274,6 +274,11 @@ public class QuestionHandler
         saveQuestionNodes();
     }
 
+    public int questionArraySize()
+    {
+        return questions.length;
+    }
+
     public static QuestionHandler getInstance()
     {
         if (single_instance == null)

@@ -49,7 +49,7 @@ public class QuestionViewerActivity extends AppCompatActivity
     private void loadQuestion()
     {
         selectedQuestion = null;
-        int selectedIndex = r.nextInt(5);
+        int selectedIndex = r.nextInt(questionHandler.questionArraySize());
         System.out.println(selectedIndex);
         TextView filterName = findViewById(R.id.filterNameText);
         TextView questionText = findViewById(R.id.questionText);
@@ -58,6 +58,7 @@ public class QuestionViewerActivity extends AppCompatActivity
         questionLayout.setTranslationY(displayMetrics.heightPixels);
         questionLayout.setRotation(0);
 
+        //The while loop is temporary until filters are done
         while(selectedIndex >= 0)
         {
             selectedQuestion = questionHandler.getQuestionAtIndex(selectedIndex);
@@ -65,6 +66,7 @@ public class QuestionViewerActivity extends AppCompatActivity
             {
                 filterName.setText("Filter Name");
                 questionText.setText(selectedQuestion.question);
+                //Animates the question layout to come from the bottom of the screen to the center.
                 ObjectAnimator animationX = ObjectAnimator.ofFloat(questionLayout, "translationY", 0);
                 animationX.setDuration(250);
                 animationX.start();
