@@ -77,6 +77,7 @@ public class QuestionViewerActivity extends AppCompatActivity
     }
 
     @SuppressLint("ClickableViewAccessibility")
+    //TODO: Add swipe up animation. This is to skip the question entirely.
     private void loadQuestionLayout()
     {
         questionLayout = findViewById(R.id.questionLayout);

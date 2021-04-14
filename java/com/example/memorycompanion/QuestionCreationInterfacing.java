@@ -85,7 +85,12 @@ public class QuestionCreationInterfacing extends AppCompatActivity
                             catAutoComplete.setVisibility(View.GONE);
                         }
                     }
+                    else
+                    {
+                        catAutoComplete.setVisibility(View.GONE);
+                    }
                 }
+
             }
         });
 
