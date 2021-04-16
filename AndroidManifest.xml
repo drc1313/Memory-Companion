@@ -26,6 +26,11 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+        <activity android:name=".FilterCreatorActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
         <activity android:name=".QuestionCreationEditorActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#30344C"
+    android:background="#CD9F13"
     tools:context=".QuestionViewerActivity">
 
     <View
         android:id="@+id/questionBackground"
         android:layout_width="407dp"
         android:layout_height="477dp"
-        android:background="#CD9F13"
+        android:background="#A8820F"
         app:layout_constraintBottom_toTopOf="@+id/buttonBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

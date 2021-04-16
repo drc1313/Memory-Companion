@@ -4,21 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#30344C"
+    android:background="#CD9F13"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".QuestionViewerActivity">
 
     <FrameLayout
-        android:id="@+id/filterFrame"
+        android:id="@+id/filterNameFrame"
         android:layout_width="match_parent"
-        android:layout_height="70sp"
-        android:layout_marginTop="50sp">
-
-        <View
-            android:id="@+id/filterBackground"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#BF9D47" />
+        android:layout_height="45dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#A8820F">
 
         <TextView
             android:id="@+id/filterNameText"
@@ -31,16 +30,16 @@
             android:textSize="25sp" />
     </FrameLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/questionFrame"
         android:layout_width="match_parent"
-        android:layout_height="490sp">
-
-        <View
-            android:id="@+id/questionBackground"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#CD9F13" />
+        android:layout_height="490sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#836A20"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/questionLayout"
@@ -77,33 +76,22 @@
                 app:srcCompat="@color/white" />
 
         </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/buttonFrame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/bottomButtonLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#CD9F13"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <View
-            android:id="@+id/bottomBackground"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#30344C" />
-
-        <LinearLayout
-            android:id="@+id/bottomButtonLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/buttonBack"
-                android:layout_width="100sp"
-                android:layout_height="50sp"
-                android:text="@string/back" />
-        </LinearLayout>
-
-    </FrameLayout>
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="100sp"
+            android:layout_height="50sp"
+            android:layout_marginTop="20dp"
+            android:text="@string/back" />
+    </LinearLayout>
 
 </LinearLayout>

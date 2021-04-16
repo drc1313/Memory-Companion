@@ -34,6 +34,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button buttonFilterCreate = findViewById(R.id.buttonFilterCreate);
+        buttonFilterCreate.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent activityIntent = new Intent(getApplicationContext(), FilterCreatorActivity.class);
+                startActivity(activityIntent);
+            }
+        });
+
         Button buttonManage = findViewById(R.id.buttonManage);
         buttonManage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
