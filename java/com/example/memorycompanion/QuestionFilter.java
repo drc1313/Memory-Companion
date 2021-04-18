@@ -3,25 +3,29 @@ import java.util.List;
 
 class QuestionFilter
 {
+
     QuestionFilter(){}
+    QuestionFilter(String t, long[] dRange, int[] correctPRange, int streak, List<String> iCats,
+                   List<String> eCats, List<String> iKeywords, List<String> eKeywords)
+    {
 
-    long minDate;
-    long maxDate;
 
-    List<String> categories;
+    }
 
-    int minCorrectAnswers;
-    int maxCorrectAnswers;
-    int minIncorrectAnswers;
-    int maxIncorrectAnswers;
+    String title;
+    
+    long[] dateRange;
 
-    int AnswerAccuracy;
+    int[] correctPercentageRange;
+    int correctStreak;
 
-    int minStreak;
-    int maxStreak;
+    List<String> includeCategories;
+    List<String> excludeCategories;
+    List<String> questionIncludeKeywords;
+    List<String> questionExcludeKeywords;
 
-    List<String> questionTags;
-    List<String> answerTags;
+    List<Integer> questionIndexes;
+
 
 }
 
