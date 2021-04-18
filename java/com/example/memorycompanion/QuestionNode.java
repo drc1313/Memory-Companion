@@ -11,7 +11,7 @@ public class QuestionNode implements Serializable
 {
     QuestionNode(int i)
     {
-        question = "";
+        question = new ArrayList<>();
         answer   = "";
         writable = true;
         index = i;
@@ -23,14 +23,14 @@ public class QuestionNode implements Serializable
     QuestionNode(List<String> C, String Q, String A, int i)
     {
         categories = C;
-        question = Q;
+        question = Arrays.asList(Q.split(" "));
         answer   = A;
         dateCreated = System.currentTimeMillis();
         writable = false;
         index = i;
     }
 
-    String question;
+    List<String> question;
     String answer;
 
     List<String> categories = new ArrayList<>();

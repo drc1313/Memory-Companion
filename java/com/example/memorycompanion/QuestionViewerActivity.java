@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Path;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -22,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class QuestionViewerActivity extends AppCompatActivity
 {
@@ -65,7 +67,12 @@ public class QuestionViewerActivity extends AppCompatActivity
             if(selectedQuestion != null)
             {
                 filterName.setText("Filter Name");
-                questionText.setText(selectedQuestion.question);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                {
+                    questionText.setText(String.join(" ", selectedQuestion.question));
+                }
+
                 //Animates the question layout to come from the bottom of the screen to the center.
                 ObjectAnimator animationX = ObjectAnimator.ofFloat(questionLayout, "translationY", 0);
                 animationX.setDuration(250);

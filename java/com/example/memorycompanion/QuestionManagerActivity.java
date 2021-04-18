@@ -1,6 +1,7 @@
 package com.example.memorycompanion;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
@@ -65,7 +66,10 @@ public class QuestionManagerActivity extends AppCompatActivity
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
         for(QuestionNode qn : questionsList)
         {
-            adapter.add(qn.question);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            {
+                adapter.add(String.join(" ", qn.question));
+            }
         }
         view.setAdapter(adapter);
         if(state != null)
