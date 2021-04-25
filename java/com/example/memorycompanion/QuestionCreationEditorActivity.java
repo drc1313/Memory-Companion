@@ -4,10 +4,22 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 
-public class QuestionCreationEditorActivity extends QuestionCreationInterfacing
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+
+public class QuestionCreationEditorActivity extends AppCompatActivity
 {
+    Button buttonCreateQuestion;
+    EditText categoryEditText;
+    EditText questionEditText;
+    EditText answerEditText;
+    AutoComplete autoComplete = new AutoComplete();
     static QuestionNode selectedQuestion = null;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,6 +51,19 @@ public class QuestionCreationEditorActivity extends QuestionCreationInterfacing
         }
     }
 
+    private void editTextSetup()
+    {
+
+        //Below sets up the auto complete for categories typed into the edit text
+        categoryEditText = findViewById(R.id.editQuestionCat);
+        questionEditText = findViewById(R.id.editQuestion);
+        answerEditText = findViewById(R.id.editAnswer);
+        ListView catAutoComplete = findViewById(R.id.autoCompleteListView);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
+        autoComplete.addAutoCatComplete(categoryEditText, catAutoComplete, adapter);
+
+    }
+
     private void backButton()
     {
         Button buttonStart = findViewById(R.id.buttonBack);
@@ -48,7 +73,7 @@ public class QuestionCreationEditorActivity extends QuestionCreationInterfacing
                 new Thread(new Runnable() {
                     public void run()
                     {
-                        questionHandler.saveQuestionNodes();
+                        autoComplete.questionHandler.saveQuestionNodes();
                         System.out.println("Save Complete");
                     }
                 }).start();
@@ -68,7 +93,7 @@ public class QuestionCreationEditorActivity extends QuestionCreationInterfacing
                 String question = questionEditText.getText().toString().trim();
                 String answer   = answerEditText.getText().toString().trim();
 
-                boolean success = questionHandler.replaceNodeAtIndex(category, question, answer, selectedQuestion.index);
+                boolean success = autoComplete.questionHandler.replaceNodeAtIndex(category, question, answer, selectedQuestion.index);
                 if(success)
                 {
                     System.out.println("The Question Has Been Replaced");

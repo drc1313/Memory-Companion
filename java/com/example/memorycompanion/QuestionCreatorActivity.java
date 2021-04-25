@@ -16,8 +16,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-public class QuestionCreatorActivity extends QuestionCreationInterfacing
+public class QuestionCreatorActivity extends AppCompatActivity
 {
+    Button buttonCreateQuestion;
+    EditText categoryEditText;
+    EditText questionEditText;
+    EditText answerEditText;
+    AutoComplete autoComplete = new AutoComplete();
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -37,7 +43,7 @@ public class QuestionCreatorActivity extends QuestionCreationInterfacing
                 new Thread(new Runnable() {
                     public void run()
                     {
-                        questionHandler.saveQuestionNodes();
+                        autoComplete.questionHandler.saveQuestionNodes();
                         System.out.println("Save Complete");
                     }
                 }).start();
@@ -45,6 +51,18 @@ public class QuestionCreatorActivity extends QuestionCreationInterfacing
                 startActivity(activityIntent);
             }
         });
+    }
+    private void editTextSetup()
+    {
+
+        //Below sets up the auto complete for categories typed into the edit text
+        categoryEditText = findViewById(R.id.editQuestionCat);
+        questionEditText = findViewById(R.id.editQuestion);
+        answerEditText = findViewById(R.id.editAnswer);
+        ListView catAutoComplete = findViewById(R.id.autoCompleteListView);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
+        autoComplete.addAutoCatComplete(categoryEditText, catAutoComplete, adapter);
+
     }
 
     private void buttonCreateSetup()
@@ -60,13 +78,13 @@ public class QuestionCreatorActivity extends QuestionCreationInterfacing
                 int newIndex = -1;
 
                 {
-                    newIndex = questionHandler.addQuestionToArray(category, question, answer);
+                    newIndex = autoComplete.questionHandler.addQuestionToArray(category, question, answer);
                 }
 
                 if(newIndex != -1)
                 {
                     System.out.println("QUESTION ADDED SUCCESFULLY");
-                    QuestionNode loadedQuestion = questionHandler.getQuestionAtIndex(newIndex);
+                    QuestionNode loadedQuestion = autoComplete.questionHandler.getQuestionAtIndex(newIndex);
                     System.out.println(loadedQuestion.question);
                     System.out.println(loadedQuestion.answer);
                     System.out.println(loadedQuestion.dateCreated);

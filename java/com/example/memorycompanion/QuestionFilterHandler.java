@@ -1,12 +1,13 @@
 package com.example.memorycompanion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class QuestionFilterHandler
 {
 
-    QuestionFilterHandler(){}
+    private QuestionFilterHandler(){}
 
     boolean createNewFilter(String title, long[] dateRange, int[] correctPRange, String inclCats,
                             String exclCats, String inclKeywords, String  exclKeywords)
@@ -15,9 +16,21 @@ public class QuestionFilterHandler
         //Get the title
         List<String> obtainedList = stringValidator(title, true);
         if(obtainedList.size() > 0) { title = obtainedList.get(0); }        //Get the title
-        List<String> cleanedIncludeCats = stringValidator(inclCats, false);
+        List<String> includeCats;
+        if(inclCats.length() > 0)
+        {
+            includeCats = Arrays.asList(inclCats.split(","));
+        }
+        List<String> excludeCats;
+        if(inclCats.length() > 0)
+        {
+            excludeCats = Arrays.asList(inclCats.split(","));
+        }
 
-        for(String s : cleanedIncludeCats)
+        List<String> includeKeywords = stringValidator(inclKeywords,false);
+        List<String> excludeKeywords = stringValidator(exclKeywords,false);
+
+        for(String s : includeKeywords)
         {
             System.out.println(s);
         }
@@ -69,7 +82,6 @@ public class QuestionFilterHandler
                     }
                     else if(str.charAt(i) != ' ')
                     {
-                        String singleWord;
                         int forwardIndex = i+1;
                         for(; forwardIndex < str.length(); forwardIndex++)
                         {
@@ -86,8 +98,14 @@ public class QuestionFilterHandler
         }
         return returnList;
     }
+    public static QuestionFilterHandler getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new QuestionFilterHandler();
 
-
+        return single_instance;
+    }
+    private static QuestionFilterHandler single_instance = null;
 
     List<String> filters = new ArrayList<>();
 

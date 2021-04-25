@@ -16,45 +16,35 @@ import java.util.ArrayList;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-public class QuestionCreationInterfacing extends AppCompatActivity
+public class AutoComplete extends AppCompatActivity
 {
     QuestionHandler questionHandler = QuestionHandler.getInstance();
-    Button buttonCreateQuestion;
-    EditText categoryEditText;
-    EditText questionEditText;
-    EditText answerEditText;
 
-    protected void editTextSetup()
+    public void addAutoCatComplete(EditText editTextCat, ListView autoCompleteList, ArrayAdapter<String> adapter)
     {
-        //Below sets up the auto complete for categories typed into the edit text
-        categoryEditText = findViewById(R.id.editQuestionCat);
-        questionEditText = findViewById(R.id.editQuestion);
-        answerEditText = findViewById(R.id.editAnswer);
-        ListView catAutoComplete = findViewById(R.id.autoCompleteListView);
-        catAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        autoCompleteList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String[] catsListed = categoryEditText.getText().toString().split(",");
+                String[] catsListed = editTextCat.getText().toString().split(",");
                 StringBuilder newCatString = new StringBuilder();
                 for(int i = 0; i < catsListed.length - 1; i++)
                 {
-                    newCatString.append(catsListed[i]).append(", ");
+                    newCatString.append(catsListed[i].trim()).append(", ");
                 }
                 newCatString.append(((TextView)view).getText().toString());
-                categoryEditText.setText(newCatString.toString());
-                categoryEditText.setSelection(newCatString.toString().length());//placing cursor at the end of the text
+                editTextCat.setText(newCatString.toString());
+                editTextCat.setSelection(newCatString.toString().length());//placing cursor at the end of the text
 
             }
         });
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
-        categoryEditText.addTextChangedListener(new TextWatcher() {
+        editTextCat.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {}
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String[] catsListed = categoryEditText.getText().toString().split(",");
+                String[] catsListed = editTextCat.getText().toString().split(",");
                 if(catsListed.length > 0)
                 {
                     String catString = catsListed[catsListed.length - 1].trim();
@@ -66,28 +56,28 @@ public class QuestionCreationInterfacing extends AppCompatActivity
                             if(catString.length() < knownCat.length() && knownCat.substring(0, catString.length()).toLowerCase().equals(catString.toLowerCase()))
                                 adapter.add(knownCat);
                         }
-                        if(categoryEditText.hasFocus() && adapter.getCount() > 0)
+                        if(editTextCat.hasFocus() && adapter.getCount() > 0)
                         {
-                            catAutoComplete.setAdapter(adapter);
+                            autoCompleteList.setAdapter(adapter);
                             if(adapter.getCount() > 4)
                             {
-                                catAutoComplete.getLayoutParams().height = 600;
+                                autoCompleteList.getLayoutParams().height = 600;
                             }
                             else
                             {
-                                catAutoComplete.getLayoutParams().height = WRAP_CONTENT;
+                                autoCompleteList.getLayoutParams().height = WRAP_CONTENT;
                             }
 
-                            catAutoComplete.setVisibility(View.VISIBLE);
+                            autoCompleteList.setVisibility(View.VISIBLE);
                         }
                         else
                         {
-                            catAutoComplete.setVisibility(View.GONE);
+                            autoCompleteList.setVisibility(View.GONE);
                         }
                     }
                     else
                     {
-                        catAutoComplete.setVisibility(View.GONE);
+                        autoCompleteList.setVisibility(View.GONE);
                     }
                 }
 
@@ -95,17 +85,16 @@ public class QuestionCreationInterfacing extends AppCompatActivity
         });
 
         //Remove the auto complete list on edit box leave
-        categoryEditText.setOnFocusChangeListener(new View.OnFocusChangeListener()
+        editTextCat.setOnFocusChangeListener(new View.OnFocusChangeListener()
         {
             @Override
             public void onFocusChange(View v, boolean hasFocus)
             {
                 if(!hasFocus)
                 {
-                    catAutoComplete.setVisibility(View.GONE);
+                    autoCompleteList.setVisibility(View.GONE);
                 }
             }
         });
     }
-
 }
