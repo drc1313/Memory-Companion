@@ -1,15 +1,25 @@
 package com.example.memorycompanion;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-class QuestionFilter
+class QuestionFilter implements Serializable
 {
 
     private QuestionFilter(){}
     QuestionFilter(String t, long[] dRange, int[] correctPRange, List<String> iCats,
                    List<String> eCats, List<String> iKeywords, List<String> eKeywords)
     {
-
-
+        title = t;
+        dateRange = dRange;
+        correctPercentageRange = correctPRange;
+        includeCategories = iCats;
+        excludeCategories = eCats;
+        questionIncludeKeywords = iKeywords;
+        questionExcludeKeywords = eKeywords;
+        correctStreak = 0;
+        questionIndexesList = new ArrayList<>();
+        questionReindex = new ArrayList<>();
     }
 
     String title;

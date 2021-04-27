@@ -7,8 +7,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.slider.RangeSlider;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +23,8 @@ public class FilterCreatorActivity extends AppCompatActivity
 {
     QuestionFilterHandler filterHandler = QuestionFilterHandler.getInstance();
     AutoComplete autoComplete = new AutoComplete();
+    TextView minPercentText;
+    TextView maxPercentText;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -26,6 +34,7 @@ public class FilterCreatorActivity extends AppCompatActivity
         buttonCreateSetup();
         editTextSetup();
         backButton();
+        sliderSetup();
     }
 
     private void backButton()
@@ -57,6 +66,32 @@ public class FilterCreatorActivity extends AppCompatActivity
         autoComplete.addAutoCatComplete(excludeCatEditTest, autoComplete2, adapter);
     }
 
+    private void sliderSetup()
+    {
+        minPercentText = findViewById(R.id.textMinDate);
+        maxPercentText = findViewById(R.id.textMaxDate);
+        RangeSlider slider = findViewById(R.id.dateSlider);
+        RangeSlider.OnSliderTouchListener onSlide = new RangeSlider.OnSliderTouchListener()
+        {
+            @Override
+            public void onStartTrackingTouch(@NonNull RangeSlider slider)
+            {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(@NonNull RangeSlider slider)
+            {
+                List<Float> percentRange = slider.getValues();
+                String minText = (percentRange.get(0).intValue()) + "%";
+                String maxText = (percentRange.get(1).intValue()) + "%";
+                minPercentText.setText(minText);
+                maxPercentText.setText(maxText);
+            }
+        };
+        slider.addOnSliderTouchListener(onSlide);
+    }
+
     private void buttonCreateSetup()
     {
         Button buttonCreateFilter = findViewById(R.id.buttonSubmitFilter);
@@ -68,23 +103,17 @@ public class FilterCreatorActivity extends AppCompatActivity
                 String excludeCat = ((EditText)findViewById(R.id.editTextExcludeCat)).getText().toString().trim();
                 String includeKeyword = ((EditText)findViewById(R.id.editTextQInclude)).getText().toString().trim();
                 String excludeKeyword = ((EditText)findViewById(R.id.editTextQExclude)).getText().toString().trim();
+                String minDate = ((EditText)findViewById(R.id.editTextMinDate)).getText().toString().trim();
+                String maxDate = ((EditText)findViewById(R.id.editTextMaxDate)).getText().toString().trim();
+                int minPercent = Integer.parseInt(minPercentText.getText().toString().substring(0, minPercentText.getText().length()-1));
+                int maxPercent = Integer.parseInt(maxPercentText.getText().toString().substring(0, maxPercentText.getText().length()-1));
 
-                int newIndex = -1;
+                String[] date = {minDate,maxDate};
+                int[] percent = {minPercent, maxPercent};
 
-                long[] date = {0,0};
-                int[] precent = {0,0};
                 System.out.println("Creating Filter");
-                filterHandler.createNewFilter(title,date,precent,includeCat,excludeCat,includeKeyword,excludeKeyword);
+                filterHandler.createNewFilter(title,date,percent,includeCat,excludeCat,includeKeyword,excludeKeyword);
 
-
-                if(newIndex != -1)
-                {
-                    System.out.println("QUESTION ADDED SUCCESFULLY");
-                    //QuestionNode loadedQuestion = questionHandler.getQuestionAtIndex(newIndex);
-//                    System.out.println(loadedQuestion.question);
-//                    System.out.println(loadedQuestion.answer);
-//                    System.out.println(loadedQuestion.dateCreated);
-                }
             }
         });
     }

@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 public class QuestionViewerActivity extends AppCompatActivity
 {
     QuestionHandler questionHandler = QuestionHandler.getInstance();
+    QuestionFilterHandler questionFilterHandler = QuestionFilterHandler.getInstance();
     DisplayMetrics displayMetrics;
     QuestionNode selectedQuestion = null;
     Random r = new Random();
@@ -51,7 +52,8 @@ public class QuestionViewerActivity extends AppCompatActivity
     private void loadQuestion()
     {
         selectedQuestion = null;
-        int selectedIndex = r.nextInt(questionHandler.questionArraySize());
+        int selectedIndex = r.nextInt(questionFilterHandler.filters.get(0).questionIndexesList.size());
+
         System.out.println(selectedIndex);
         TextView filterName = findViewById(R.id.filterNameText);
         TextView questionText = findViewById(R.id.questionText);
@@ -63,7 +65,7 @@ public class QuestionViewerActivity extends AppCompatActivity
         //The while loop is temporary until filters are done
         while(selectedIndex >= 0)
         {
-            selectedQuestion = questionHandler.getQuestionAtIndex(selectedIndex);
+            selectedQuestion = questionHandler.getQuestionAtIndex(questionFilterHandler.filters.get(0).questionIndexesList.get(selectedIndex));
             if(selectedQuestion != null)
             {
                 filterName.setText("Filter Name");
@@ -130,7 +132,20 @@ public class QuestionViewerActivity extends AppCompatActivity
                     }
                     else
                     {
-                        ObjectAnimator animationX = ObjectAnimator.ofFloat(view, "translationX", questionLayout.getTranslationX() * 2.5f);
+                        //If positive then it was swiped right indicating correct answer
+                        float touchRelease = questionLayout.getTranslationX();
+                        if(touchRelease > 0)
+                        {
+                            selectedQuestion.correct +=1;
+                        }
+                        else
+                        {
+                            selectedQuestion.wrong +=1;
+                        }
+                        System.out.println("Correct: " +selectedQuestion.correct);
+                        System.out.println("Wrong: " + selectedQuestion.wrong);
+                        ObjectAnimator animationX = ObjectAnimator.ofFloat(view, "translationX", touchRelease* 2.5f);
+
                         animationX.addListener(new Animator.AnimatorListener(){
                             @Override
                             public void onAnimationStart(Animator animation) {
