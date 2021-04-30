@@ -50,6 +50,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button buttonFilterManager = findViewById(R.id.buttonfilterManager);
+        buttonFilterManager.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent activityIntent = new Intent(getApplicationContext(), FilterManagerActivity.class);
+                startActivity(activityIntent);
+            }
+        });
+
         Button buttonStart = findViewById(R.id.buttonStart);
         buttonStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

@@ -16,16 +16,22 @@
         android:text="@string/add_questions" />
 
     <Button
+        android:id="@+id/buttonFilterCreate"
+        android:layout_width="167dp"
+        android:layout_height="68dp"
+        android:text="Add Filter" />
+
+    <Button
         android:id="@+id/buttonManage"
         android:layout_width="167dp"
         android:layout_height="68dp"
         android:text="Manage Questions" />
 
     <Button
-        android:id="@+id/buttonFilterCreate"
+        android:id="@+id/buttonfilterManager"
         android:layout_width="167dp"
         android:layout_height="68dp"
-        android:text="Add Filter" />
+        android:text="Manage Filters" />
 
     <Button
         android:id="@+id/buttonStart"
