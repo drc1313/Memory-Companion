@@ -15,6 +15,8 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends AppCompatActivity {
 
+    FilterHandler qfh = FilterHandler.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadContent()
     {
+        qfh.loadQuestionFilters();
+
         Button buttonCreate = findViewById(R.id.buttonCreate);
         buttonCreate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

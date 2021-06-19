@@ -4,36 +4,36 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Path;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class QuestionViewerActivity extends AppCompatActivity
 {
     QuestionHandler questionHandler = QuestionHandler.getInstance();
-    QuestionFilterHandler questionFilterHandler = QuestionFilterHandler.getInstance();
+    FilterHandler filterHandler = FilterHandler.getInstance();
     DisplayMetrics displayMetrics;
     QuestionNode selectedQuestion = null;
     Random r = new Random();
     LinearLayout questionLayout;
     TextView questionAnswerText;
+
+    //Get Question Info Elements
+    TextView questionCorrect;
+    TextView questionIncorrect;
+    TextView questionCreationDate;
+    TextView questionLastAsked;
+
     private Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,8 +43,11 @@ public class QuestionViewerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.question_viewer);
 
-        loadButtons();
+        //Adding this for now until filter selection is done
+        //Updates the filter with current questions
+        filterHandler.indexQuestionsToFilter(filterHandler.filters.get(0));
 
+        loadButtons();
         loadQuestionLayout();
         loadQuestion();
     }
@@ -52,11 +55,13 @@ public class QuestionViewerActivity extends AppCompatActivity
     private void loadQuestion()
     {
         selectedQuestion = null;
-        int selectedIndex = r.nextInt(questionFilterHandler.filters.get(0).questionIndexesList.size());
+        int selectedIndex = r.nextInt(filterHandler.filters.get(0).questionIndexesList.size());
 
         System.out.println(selectedIndex);
         TextView filterName = findViewById(R.id.filterNameText);
         TextView questionText = findViewById(R.id.questionText);
+
+
 
         questionLayout.setTranslationX(0);
         questionLayout.setTranslationY(displayMetrics.heightPixels);
@@ -65,14 +70,19 @@ public class QuestionViewerActivity extends AppCompatActivity
         //The while loop is temporary until filters are done
         while(selectedIndex >= 0)
         {
-            selectedQuestion = questionHandler.getQuestionAtIndex(questionFilterHandler.filters.get(0).questionIndexesList.get(selectedIndex));
+            selectedQuestion = questionHandler.getQuestionAtIndex(filterHandler.filters.get(0).questionIndexesList.get(selectedIndex));
             if(selectedQuestion != null)
             {
                 filterName.setText("Filter Name");
+                questionCorrect.setText("Correct: " + selectedQuestion.correct);
+                questionIncorrect.setText("Incorrect: " + selectedQuestion.wrong);
+                questionCreationDate.setText("Date Created: " + filterHandler.convertLongDateToTextDate(selectedQuestion.dateCreated));
+                questionLastAsked.setText("Last Date Asked: " + filterHandler.convertLongDateToTextDate(selectedQuestion.dateAsked));
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 {
                     questionText.setText(String.join(" ", selectedQuestion.question));
+
                 }
 
                 //Animates the question layout to come from the bottom of the screen to the center.
@@ -91,6 +101,11 @@ public class QuestionViewerActivity extends AppCompatActivity
     {
         questionLayout = findViewById(R.id.questionLayout);
         questionAnswerText = findViewById(R.id.questionText);
+
+        questionCorrect = findViewById(R.id.statCorrect);
+        questionIncorrect = findViewById(R.id.statIncorrect);
+        questionCreationDate = findViewById(R.id.statCreated);
+        questionLastAsked = findViewById(R.id.statLastAsked);
 
         questionLayout.setOnTouchListener(new View.OnTouchListener() {
             float startTouchX = 0;
@@ -142,8 +157,13 @@ public class QuestionViewerActivity extends AppCompatActivity
                         {
                             selectedQuestion.wrong +=1;
                         }
+                        //Update date when question was last asked.
+                        selectedQuestion.dateAsked = System.currentTimeMillis();
+
                         System.out.println("Correct: " +selectedQuestion.correct);
                         System.out.println("Wrong: " + selectedQuestion.wrong);
+
+
                         ObjectAnimator animationX = ObjectAnimator.ofFloat(view, "translationX", touchRelease* 2.5f);
 
                         animationX.addListener(new Animator.AnimatorListener(){
@@ -176,6 +196,8 @@ public class QuestionViewerActivity extends AppCompatActivity
             }
         });
     }
+
+
 
     private void loadButtons()
     {

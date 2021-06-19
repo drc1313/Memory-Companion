@@ -3,12 +3,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-class QuestionFilter implements Serializable
+class Filter implements Serializable
 {
 
-    private QuestionFilter(){}
-    QuestionFilter(String t, long[] dRange, int[] correctPRange, List<String> iCats,
-                   List<String> eCats, List<String> iKeywords, List<String> eKeywords)
+    private Filter(){}
+    Filter(String t, long[] dRange, int[] correctPRange, List<String> iCats,
+           List<String> eCats, List<String> iKeywords, List<String> eKeywords)
     {
         title = t;
         dateRange = dRange;

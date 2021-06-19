@@ -13,13 +13,12 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FilterManagerActivity extends AppCompatActivity
 {
-    QuestionFilterHandler filterHandler = QuestionFilterHandler.getInstance();
+    FilterHandler filterHandler = FilterHandler.getInstance();
 
-    public static QuestionFilter selectedFilter = null;
+    public static Filter selectedFilter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,7 +53,7 @@ public class FilterManagerActivity extends AppCompatActivity
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             {
                 System.out.println(filterHandler.filters.get(position).title + " Has been Removed");
-                QuestionFilter removeNode = filterHandler.filters.remove(position);
+                Filter removeNode = filterHandler.filters.remove(position);
                // filterHandler.removeQuestionFromArray(removeNode.index);
                 populateFilterView(filterView, filterView.onSaveInstanceState());
                 return true;
@@ -64,7 +63,7 @@ public class FilterManagerActivity extends AppCompatActivity
     private void populateFilterView(ListView view , Parcelable state)
     {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
-        for(QuestionFilter filter : filterHandler.filters)
+        for(Filter filter : filterHandler.filters)
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             {
@@ -78,11 +77,14 @@ public class FilterManagerActivity extends AppCompatActivity
         }
     }
 
+    //Load buttons and actions
     private void loadContent()
     {
+        //TODO: Only save when needed
         Button buttonStart = findViewById(R.id.buttonBack);
         buttonStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                filterHandler.saveFilters();
                 Intent activityIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(activityIntent);
             }

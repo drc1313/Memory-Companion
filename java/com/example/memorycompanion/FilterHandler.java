@@ -1,5 +1,15 @@
 package com.example.memorycompanion;
 
+import android.content.Context;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,17 +17,19 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class QuestionFilterHandler
+public class FilterHandler
 {
     QuestionHandler questionHandler = QuestionHandler.getInstance();
-    private QuestionFilterHandler(){}
+    List<Filter> filters = new ArrayList<>();
+
+    private FilterHandler(){}
 
     //TODO: Auto capitolize categories
     boolean createNewFilter(String title, String[] dateRange, int[] correctPRange, String inclCats,
                             String exclCats, String inclKeywords, String exclKeywords)
     {
         boolean validFilter = false;
-        QuestionFilter filter;
+        Filter filter;
 
         //Get the title
         List<String> obtainedList = stringValidator(title, true);
@@ -42,7 +54,7 @@ public class QuestionFilterHandler
 
         if(title.length() > 0)
         {
-            filter = new QuestionFilter(title, dateArray, correctPRange, includeCats, excludeCats, includeKeywords, excludeKeywords);
+            filter = new Filter(title, dateArray, correctPRange, includeCats, excludeCats, includeKeywords, excludeKeywords);
             filters.add(filter);
             indexQuestionsToFilter(filter);
             validFilter = true;
@@ -66,7 +78,7 @@ public class QuestionFilterHandler
                 for(int i = 0; i < tempArr.length; i++)
                 {
                     tempArr[i] = tempArr[i].substring(0,1).toUpperCase() + tempArr[i].substring(1);
-                    newTitle.append(tempArr[i]);
+                    newTitle.append(tempArr[i] + " ");
                 }
                 returnList.add(newTitle.toString());
             }
@@ -79,7 +91,6 @@ public class QuestionFilterHandler
                     if(str.charAt(i) == '"')
                     {
                         boolean validQuote = false;
-                        String quotedText;
                         int forwardIndex = i+2;
                         for(; forwardIndex < str.length(); forwardIndex++)
                         {
@@ -112,7 +123,7 @@ public class QuestionFilterHandler
         return returnList;
     }
 
-    private long convertTextDateToLongDate(String myDate)
+    public long convertTextDateToLongDate(String myDate)
     {
         long longDate = -1;
         if(myDate.length() == 8)
@@ -134,7 +145,18 @@ public class QuestionFilterHandler
         return longDate;
     }
 
-    public void indexQuestionsToFilter(QuestionFilter filter)
+    public String convertLongDateToTextDate(long dateTime)
+    {
+        //creating Date from millisecond
+        Date currentDate = new Date(dateTime);
+
+        DateFormat df = new SimpleDateFormat("MM/dd/yy");
+
+        //formatted value of current Date
+        return df.format(currentDate);
+    }
+
+    public void indexQuestionsToFilter(Filter filter)
     {
         boolean addQuestion;
         for(QuestionNode question : questionHandler.getAllQuestions())
@@ -198,15 +220,58 @@ public class QuestionFilterHandler
         }
     }
 
-    public static QuestionFilterHandler getInstance()
+    public void saveFilters()
+    {
+        try
+        {
+            FileOutputStream fos = null;
+            fos = App.getContext().openFileOutput("questionFilters.txt", Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(filters);
+            os.close();
+            fos.close();
+
+        } catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadQuestionFilters()
+    {
+        File file = App.getContext().getFileStreamPath("questionFilters.txt");
+        if (file.exists())
+        {
+            try
+            {
+                FileInputStream fis = App.getContext().openFileInput("questionFilters.txt");
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                filters = (List<Filter>) ois.readObject();
+                ois.close();
+                fis.close();
+
+            } catch (FileNotFoundException ex) {
+                System.out.println(ex);
+            } catch (IOException ex) {
+                System.out.println(ex);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static FilterHandler getInstance()
     {
         if (single_instance == null)
-            single_instance = new QuestionFilterHandler();
+            single_instance = new FilterHandler();
 
         return single_instance;
     }
-    private static QuestionFilterHandler single_instance = null;
+    private static FilterHandler single_instance = null;
 
-    List<QuestionFilter> filters = new ArrayList<>();
+
 
 }

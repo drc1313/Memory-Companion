@@ -14,14 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.slider.RangeSlider;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class FilterCreatorActivity extends AppCompatActivity
 {
-    QuestionFilterHandler filterHandler = QuestionFilterHandler.getInstance();
+    FilterHandler filterHandler = FilterHandler.getInstance();
     AutoComplete autoComplete = new AutoComplete();
     TextView minPercentText;
     TextView maxPercentText;
@@ -47,6 +45,7 @@ public class FilterCreatorActivity extends AppCompatActivity
                     public void run()
                     {
                         //questionHandler.saveQuestionNodes();
+                        filterHandler.saveFilters();
                         System.out.println("Save Complete");
                     }
                 }).start();

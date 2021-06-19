@@ -26,6 +26,7 @@ public class QuestionNode implements Serializable
         question = Arrays.asList(Q.split(" "));
         answer   = A;
         dateCreated = System.currentTimeMillis();
+        dateAsked = dateCreated;
         writable = false;
         index = i;
     }
@@ -39,6 +40,7 @@ public class QuestionNode implements Serializable
     int wrong   = 0;
     int streak  = 0;
     long dateCreated;
+    long dateAsked;
     boolean writable;
     int index;
 }
