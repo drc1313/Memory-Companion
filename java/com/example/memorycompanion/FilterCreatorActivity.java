@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -106,12 +107,14 @@ public class FilterCreatorActivity extends AppCompatActivity
                 String maxDate = ((EditText)findViewById(R.id.editTextMaxDate)).getText().toString().trim();
                 int minPercent = Integer.parseInt(minPercentText.getText().toString().substring(0, minPercentText.getText().length()-1));
                 int maxPercent = Integer.parseInt(maxPercentText.getText().toString().substring(0, maxPercentText.getText().length()-1));
+                boolean includedAllOrAny = ((Switch)findViewById(R.id.includedAnyAll)).isChecked();
+                boolean excludedAllOrAny = ((Switch)findViewById(R.id.excludedAnyAll)).isChecked();
 
                 String[] date = {minDate,maxDate};
                 int[] percent = {minPercent, maxPercent};
 
                 System.out.println("Creating Filter");
-                filterHandler.createNewFilter(title,date,percent,includeCat,excludeCat,includeKeyword,excludeKeyword);
+                filterHandler.createNewFilter(title,date,percent,includeCat,excludeCat,includeKeyword,excludeKeyword, includedAllOrAny, excludedAllOrAny);
 
             }
         });

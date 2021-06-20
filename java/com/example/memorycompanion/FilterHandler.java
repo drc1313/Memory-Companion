@@ -27,7 +27,8 @@ public class FilterHandler
 
     //TODO: Auto capitolize categories
     boolean createNewFilter(String title, String[] dateRange, int[] correctPRange, String inclCats,
-                            String exclCats, String inclKeywords, String exclKeywords)
+                            String exclCats, String inclKeywords, String exclKeywords,
+                            boolean includeAllOrAny, boolean excludedAllOrAny)
     {
         boolean validFilter = false;
         Filter filter;
@@ -55,7 +56,9 @@ public class FilterHandler
 
         if(title.length() > 0)
         {
-            filter = new Filter(title, dateArray, correctPRange, includeCats, excludeCats, includeKeywords, excludeKeywords);
+            filter = new Filter(title, dateArray, correctPRange, includeCats, excludeCats,
+                    includeKeywords, excludeKeywords, includeAllOrAny, excludedAllOrAny);
+
             filters.add(filter);
             indexQuestionsToFilter(filter);
             validFilter = true;
@@ -200,27 +203,58 @@ public class FilterHandler
             //Check question categories are matched in include/exclude cats
             if(addQuestion && (filter.includeCategories.size()>0 || filter.excludeCategories.size()>0))
             {
-                boolean isIncluded = false;
-                for (String cat : question.categories)
+                //TODO: Added Exclude all or any filtering.
+                //If True then we are looking for any match to the included categories
+                //If False then we are looking for the question to contain all filtered include cats
+                if(filter.isIncludeAllOrAny)
                 {
-                    System.out.println((cat));
-                    System.out.println((filter.includeCategories));
-                    if(!isIncluded && filter.includeCategories.contains(cat))
+                    boolean isIncluded = false;
+                    for (String cat : question.categories)
                     {
-                        System.out.println(("Question Category " + cat + "is Included"));
-                        isIncluded = true;
+                        System.out.println((cat));
+                        System.out.println((filter.includeCategories));
+                        if (!isIncluded && filter.includeCategories.contains(cat))
+                        {
+                            System.out.println(("Question Category " + cat + " is Included"));
+                            isIncluded = true;
+                        }
+                        if (filter.excludeCategories.contains(cat))
+                        {
+                            System.out.println(("Skipping Question " + cat + "Excluded"));
+                            addQuestion = false;
+                            break;
+                        }
                     }
-                    if(filter.excludeCategories.contains(cat))
+                    if (filter.includeCategories.size() > 0 && !isIncluded)
                     {
-                        System.out.println(("Skipping Question " + cat + "Excluded"));
+                        System.out.println(("Skipping Question " + question.question + "Not Included"));
                         addQuestion = false;
-                        break;
                     }
                 }
-                if(filter.includeCategories.size() > 0 && !isIncluded)
+                else
                 {
-                    System.out.println(("Skipping Question " + question.question + "Not Included"));
-                    addQuestion = false;
+                    for (String cat : filter.includeCategories)
+                    {
+                        if (!question.categories.contains(cat))
+                        {
+                            System.out.println(("Skipping Question. " + cat + " is not in Question"));
+                            addQuestion = false;
+                            break;
+                        }
+                    }
+                    //Added for now until exclude any or all is implemented.
+                    // Will remove question from filter when matched above but contains excluded cat
+                    if(addQuestion)
+                    {
+                        for (String exclude : filter.excludeCategories)
+                        {
+                            if(question.categories.contains(exclude))
+                            {
+                                addQuestion = false;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 

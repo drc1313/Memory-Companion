@@ -8,12 +8,15 @@ class Filter implements Serializable
 
     private Filter(){}
     Filter(String t, long[] dRange, int[] correctPRange, List<String> iCats,
-           List<String> eCats, List<String> iKeywords, List<String> eKeywords)
+           List<String> eCats, List<String> iKeywords, List<String> eKeywords,
+           boolean includeAllOrAny, boolean excludeAllOrAny)
     {
         title = t;
         dateRange = dRange;
         correctPercentageRange = correctPRange;
         includeCategories = iCats;
+        isIncludeAllOrAny = includeAllOrAny;
+        isExcludeAllOrAny = excludeAllOrAny;
         excludeCategories = eCats;
         questionIncludeKeywords = iKeywords;
         questionExcludeKeywords = eKeywords;
@@ -30,7 +33,10 @@ class Filter implements Serializable
     int correctStreak;
 
     List<String> includeCategories;
+    boolean isIncludeAllOrAny;
     List<String> excludeCategories;
+    boolean isExcludeAllOrAny;
+
     List<String> questionIncludeKeywords;
     List<String> questionExcludeKeywords;
 
