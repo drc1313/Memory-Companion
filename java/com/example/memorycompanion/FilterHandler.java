@@ -20,6 +20,7 @@ import java.util.List;
 public class FilterHandler
 {
     QuestionHandler questionHandler = QuestionHandler.getInstance();
+    static Filter selectedFilter = null;
     List<Filter> filters = new ArrayList<>();
 
     private FilterHandler(){}
@@ -156,8 +157,12 @@ public class FilterHandler
         return df.format(currentDate);
     }
 
+    //This will add valid questions to filter specifications
     public void indexQuestionsToFilter(Filter filter)
     {
+        //Wipe all indexes of list before reindexing
+        filter.questionIndexesList.clear();
+
         boolean addQuestion;
         for(QuestionNode question : questionHandler.getAllQuestions())
         {
@@ -176,7 +181,13 @@ public class FilterHandler
             int questionAcc = 0;
             if((question.correct + question.wrong) > 0)
             {
-                questionAcc = (int)((((float)question.correct) / (question.correct + question.wrong))*100);
+                questionAcc = (int)((((float)question.correct) / (question.correct + question.wrong)) * 100);
+                System.out.println("ACC "+questionAcc);
+            }
+            else
+            {
+                //Set accuracy to 50% if question was never answered.
+                questionAcc = 50;
                 System.out.println("ACC "+questionAcc);
             }
 

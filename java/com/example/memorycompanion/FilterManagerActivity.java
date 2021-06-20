@@ -18,7 +18,7 @@ public class FilterManagerActivity extends AppCompatActivity
 {
     FilterHandler filterHandler = FilterHandler.getInstance();
 
-    public static Filter selectedFilter = null;
+    //public static Filter selectedFilter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,7 +40,7 @@ public class FilterManagerActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 System.out.println(filterView);
-                selectedFilter = filterHandler.filters.get(position);
+                FilterHandler.selectedFilter = filterHandler.filters.get(position);
                // System.out.println(selectedFilter.question);
                 //Intent activityIntent = new Intent(getApplicationContext(), QuestionCreationEditorActivity.class);
                // startActivity(activityIntent);

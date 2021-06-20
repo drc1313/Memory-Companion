@@ -45,7 +45,7 @@ public class QuestionViewerActivity extends AppCompatActivity
 
         //Adding this for now until filter selection is done
         //Updates the filter with current questions
-        filterHandler.indexQuestionsToFilter(filterHandler.filters.get(0));
+        filterHandler.indexQuestionsToFilter(FilterHandler.selectedFilter);
 
         loadButtons();
         loadQuestionLayout();
@@ -55,43 +55,45 @@ public class QuestionViewerActivity extends AppCompatActivity
     private void loadQuestion()
     {
         selectedQuestion = null;
-        int selectedIndex = r.nextInt(filterHandler.filters.get(0).questionIndexesList.size());
-
-        System.out.println(selectedIndex);
-        TextView filterName = findViewById(R.id.filterNameText);
-        TextView questionText = findViewById(R.id.questionText);
-
-
-
-        questionLayout.setTranslationX(0);
-        questionLayout.setTranslationY(displayMetrics.heightPixels);
-        questionLayout.setRotation(0);
-
-        //The while loop is temporary until filters are done
-        while(selectedIndex >= 0)
+        if(FilterHandler.selectedFilter.questionIndexesList.size() > 0)
         {
-            selectedQuestion = questionHandler.getQuestionAtIndex(filterHandler.filters.get(0).questionIndexesList.get(selectedIndex));
-            if(selectedQuestion != null)
+            int selectedIndex = r.nextInt(FilterHandler.selectedFilter.questionIndexesList.size());
+
+            System.out.println(selectedIndex);
+            TextView filterName = findViewById(R.id.filterNameText);
+            TextView questionText = findViewById(R.id.questionText);
+
+
+            questionLayout.setTranslationX(0);
+            questionLayout.setTranslationY(displayMetrics.heightPixels);
+            questionLayout.setRotation(0);
+
+            //The while loop is temporary until filters are done
+            while (selectedIndex >= 0)
             {
-                filterName.setText("Filter Name");
-                questionCorrect.setText("Correct: " + selectedQuestion.correct);
-                questionIncorrect.setText("Incorrect: " + selectedQuestion.wrong);
-                questionCreationDate.setText("Date Created: " + filterHandler.convertLongDateToTextDate(selectedQuestion.dateCreated));
-                questionLastAsked.setText("Last Date Asked: " + filterHandler.convertLongDateToTextDate(selectedQuestion.dateAsked));
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                selectedQuestion = questionHandler.getQuestionAtIndex(FilterHandler.selectedFilter.questionIndexesList.get(selectedIndex));
+                if (selectedQuestion != null)
                 {
-                    questionText.setText(String.join(" ", selectedQuestion.question));
+                    filterName.setText("Filter Name");
+                    questionCorrect.setText("Correct: " + selectedQuestion.correct);
+                    questionIncorrect.setText("Incorrect: " + selectedQuestion.wrong);
+                    questionCreationDate.setText("Date Created: " + filterHandler.convertLongDateToTextDate(selectedQuestion.dateCreated));
+                    questionLastAsked.setText("Last Date Asked: " + filterHandler.convertLongDateToTextDate(selectedQuestion.dateAsked));
 
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    {
+                        questionText.setText(String.join(" ", selectedQuestion.question));
+
+                    }
+
+                    //Animates the question layout to come from the bottom of the screen to the center.
+                    ObjectAnimator animationX = ObjectAnimator.ofFloat(questionLayout, "translationY", 0);
+                    animationX.setDuration(250);
+                    animationX.start();
+                    break;
                 }
-
-                //Animates the question layout to come from the bottom of the screen to the center.
-                ObjectAnimator animationX = ObjectAnimator.ofFloat(questionLayout, "translationY", 0);
-                animationX.setDuration(250);
-                animationX.start();
-                break;
+                selectedIndex--;
             }
-            selectedIndex--;
         }
     }
 
@@ -204,6 +206,7 @@ public class QuestionViewerActivity extends AppCompatActivity
         Button buttonStart = findViewById(R.id.buttonBack);
         buttonStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                questionHandler.saveQuestionNodes();
                 Intent activityIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(activityIntent);
             }

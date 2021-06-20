@@ -65,8 +65,12 @@ public class MainActivity extends AppCompatActivity {
         Button buttonStart = findViewById(R.id.buttonStart);
         buttonStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent activityIntent = new Intent(getApplicationContext(), QuestionViewerActivity.class);
-                startActivity(activityIntent);
+                //Don't start unless filter is specified
+                if(FilterHandler.selectedFilter != null)
+                {
+                    Intent activityIntent = new Intent(getApplicationContext(), QuestionViewerActivity.class);
+                    startActivity(activityIntent);
+                }
             }
         });
     }
