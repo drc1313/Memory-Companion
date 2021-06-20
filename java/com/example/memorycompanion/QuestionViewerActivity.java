@@ -74,7 +74,7 @@ public class QuestionViewerActivity extends AppCompatActivity
                 selectedQuestion = questionHandler.getQuestionAtIndex(FilterHandler.selectedFilter.questionIndexesList.get(selectedIndex));
                 if (selectedQuestion != null)
                 {
-                    filterName.setText("Filter Name");
+                    filterName.setText(FilterHandler.selectedFilter.title);
                     questionCorrect.setText("Correct: " + selectedQuestion.correct);
                     questionIncorrect.setText("Incorrect: " + selectedQuestion.wrong);
                     questionCreationDate.setText("Date Created: " + filterHandler.convertLongDateToTextDate(selectedQuestion.dateCreated));
@@ -115,84 +115,93 @@ public class QuestionViewerActivity extends AppCompatActivity
             float movementZ = 0;
 
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
-                {
-                    startTouchX = motionEvent.getX();
-
-                }
-                if(motionEvent.getAction() == MotionEvent.ACTION_MOVE)
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
+                if(selectedQuestion != null)
                 {
 
-                    movementX = ((startTouchX - motionEvent.getX()) ) ;
-                    movementZ = ((startTouchX - motionEvent.getX())/30) ;
-
-                    questionLayout.setTranslationX(questionLayout.getTranslationX() - movementX);
-                    questionLayout.setRotation(questionLayout.getRotation() - movementZ);
-                }
-
-                if(motionEvent.getAction() == MotionEvent.ACTION_UP)
-                {
-                    //If the card is swiped less than a certain amount it will return to its original position.
-                    //Otherwise it goes off screen.
-                    if(Math.abs(questionLayout.getTranslationX())<250)
+                    if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
                     {
-                        ObjectAnimator animationX = ObjectAnimator.ofFloat(view, "translationX", 0);
+                        startTouchX = motionEvent.getX();
 
-                        animationX.setDuration(200);
-                        animationX.start();
-
-                        ObjectAnimator animationZ = ObjectAnimator.ofFloat(view, "rotation", view.getRotation(), 0);
-                        animationZ.setDuration(200);
-                        animationZ.start();
                     }
-                    else
+                    if(motionEvent.getAction() == MotionEvent.ACTION_MOVE)
                     {
-                        //If positive then it was swiped right indicating correct answer
-                        float touchRelease = questionLayout.getTranslationX();
-                        if(touchRelease > 0)
+
+                        movementX = ((startTouchX - motionEvent.getX()) ) ;
+                        movementZ = ((startTouchX - motionEvent.getX())/30) ;
+
+                        questionLayout.setTranslationX(questionLayout.getTranslationX() - movementX);
+                        questionLayout.setRotation(questionLayout.getRotation() - movementZ);
+                    }
+
+                    if(motionEvent.getAction() == MotionEvent.ACTION_UP)
+                    {
+                        //If the card is swiped less than a certain amount it will return to its original position.
+                        //Otherwise it goes off screen.
+                        if (Math.abs(questionLayout.getTranslationX()) < 250)
                         {
-                            selectedQuestion.correct +=1;
-                        }
-                        else
+                            ObjectAnimator animationX = ObjectAnimator.ofFloat(view, "translationX", 0);
+
+                            animationX.setDuration(200);
+                            animationX.start();
+
+                            ObjectAnimator animationZ = ObjectAnimator.ofFloat(view, "rotation", view.getRotation(), 0);
+                            animationZ.setDuration(200);
+                            animationZ.start();
+                        } else
                         {
-                            selectedQuestion.wrong +=1;
-                        }
-                        //Update date when question was last asked.
-                        selectedQuestion.dateAsked = System.currentTimeMillis();
-
-                        System.out.println("Correct: " +selectedQuestion.correct);
-                        System.out.println("Wrong: " + selectedQuestion.wrong);
-
-
-                        ObjectAnimator animationX = ObjectAnimator.ofFloat(view, "translationX", touchRelease* 2.5f);
-
-                        animationX.addListener(new Animator.AnimatorListener(){
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-
-                            }
-                            @Override
-                            public void onAnimationEnd(Animator animation)
+                            //If positive then it was swiped right indicating correct answer
+                            float touchRelease = questionLayout.getTranslationX();
+                            if (touchRelease > 0)
                             {
-                                System.out.println("LOADING QUESTION");
-                                loadQuestion();
+                                selectedQuestion.correct += 1;
+                            } else
+                            {
+                                selectedQuestion.wrong += 1;
                             }
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
+                            //Update date when question was last asked.
+                            selectedQuestion.dateAsked = System.currentTimeMillis();
 
-                            }
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
+                            System.out.println("Correct: " + selectedQuestion.correct);
+                            System.out.println("Wrong: " + selectedQuestion.wrong);
 
-                            }
-                        });
-                        animationX.setDuration(90);
-                        animationX.start();
+
+                            ObjectAnimator animationX = ObjectAnimator.ofFloat(view, "translationX", touchRelease * 2.5f);
+
+                            animationX.addListener(new Animator.AnimatorListener()
+                            {
+                                @Override
+                                public void onAnimationStart(Animator animation)
+                                {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation)
+                                {
+                                    System.out.println("LOADING QUESTION");
+                                    loadQuestion();
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation)
+                                {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation)
+                                {
+
+                                }
+                            });
+                            animationX.setDuration(90);
+                            animationX.start();
+                        }
+
+                        questionAnswerText.setText(selectedQuestion.answer);
                     }
-
-                    questionAnswerText.setText(selectedQuestion.answer);
                 }
                 return true;
             }

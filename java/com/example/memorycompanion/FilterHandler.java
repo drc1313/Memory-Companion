@@ -38,12 +38,12 @@ public class FilterHandler
         List<String> includeCats = new ArrayList<>();
         if(inclCats.length() > 0)
         {
-            includeCats = Arrays.asList(inclCats.split(","));
+            includeCats = GeneralFunctions.stringToListConversion(inclCats);
         }
         List<String> excludeCats = new ArrayList<>();
         if(exclCats.length() > 0)
         {
-            excludeCats = Arrays.asList(exclCats.split(","));
+            excludeCats =  GeneralFunctions.stringToListConversion(exclCats);
         }
 
         List<String> includeKeywords = stringValidator(inclKeywords,false);
@@ -203,13 +203,16 @@ public class FilterHandler
                 boolean isIncluded = false;
                 for (String cat : question.categories)
                 {
+                    System.out.println((cat));
+                    System.out.println((filter.includeCategories));
                     if(!isIncluded && filter.includeCategories.contains(cat))
                     {
+                        System.out.println(("Question Category " + cat + "is Included"));
                         isIncluded = true;
                     }
                     if(filter.excludeCategories.contains(cat))
                     {
-                        System.out.println(("Skipping Question " + question.question + "Excluded"));
+                        System.out.println(("Skipping Question " + cat + "Excluded"));
                         addQuestion = false;
                         break;
                     }
